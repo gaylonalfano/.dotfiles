@@ -5,12 +5,15 @@
 # Adding Gem.bindir directory to PATH env variable
 # so can run scripts from any installed gem.
 PATH=$(ruby -e 'puts Gem.bindir'):$PATH
+export PATH="$HOME/.deno/bin:$PATH"
 export PATH="$HOME/.cargo/bin:$PATH"
 export PATH="$HOME/.emacs.d/bin:$PATH"
 export PATH="$HOME/.local/lib:$PATH"
 export PATH="$HOME/.local/bin:$PATH"
 export PATH="$HOME/.pyenv/bin:$PATH"
 
+# Export UID for Docker and Postgraphile
+export UID
 
 # Config Pyenv root
 export PYENV_ROOT="${HOME}/.pyenv"

@@ -70,6 +70,7 @@ set nowrap
 " === Indentation === "
 " Attempt smart indentation
 set smartindent
+set autoindent
 " Backspace through anything in insert mode
 set backspace=indent,eol,start
 
@@ -113,6 +114,20 @@ endif
 " Editor theme
 set background=dark
 
+" === Netrw === "
+" https://shapeshed.com/vim-netrw/
+" Remove directory banner
+let g:netrw_banner = 1
+
+" Default display style (four total options using 'i' to cycle)
+let g:netrw_liststyle = 3
+
+" Open files in new window (1-hsplit, 2-vsplit, 3-newtab, 4-prevwin)
+let g:netrw_browse_split = 1
+
+" Autoresize explore window
+let g:netrw_winsize = 25
+
 " Can set defaults for window splits
 "set splitbelow
 "set splitright
@@ -123,7 +138,7 @@ set background=dark
 call plug#begin('~/.config/nvim/plugged')
 
 Plug 'easymotion/vim-easymotion'
-Plug 'scrooloose/nerdtree'
+" Plug 'scrooloose/nerdtree'
 "Plug 'scrooloose/nerdcommenter'
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
 Plug 'neoclide/coc-lists'
@@ -184,15 +199,15 @@ set background=dark
 " ===                           PLUGIN SETUP                               === "
 " ============================================================================
 
-" === NERDTree === "
-" Show hidden files/directories
-let g:NERDTreeShowHidden = 1
+" " === NERDTree === "
+" " Show hidden files/directories
+" let g:NERDTreeShowHidden = 1
 
-" Show minimal UI for NERDTree
-let g:NERDTreeMinimalUI = 1
+" " Show minimal UI for NERDTree
+" let g:NERDTreeMinimalUI = 1
 
-" Set default window width for NERDTree
-let g:NERDTreeWinSize = 30
+" " Set default window width for NERDTree
+" let g:NERDTreeWinSize = 30
 
 " === CoC Plugin === "
 " coc-python MS Python Language Server
@@ -332,21 +347,40 @@ tnoremap <Esc> <C-\><C-n>
 
 " ==== COC Plugin ============================================================ "
 " use <tab> for trigger completion and navigate to the next complete item
-function! s:check_back_space() abort
-  let col = col('.') - 1
-  return !col || getline('.')[col - 1]  =~ '\s'
-endfunction
-
 inoremap <silent><expr> <Tab>
       \ pumvisible() ? "\<C-n>" :
       \ <SID>check_back_space() ? "\<Tab>" :
       \ coc#refresh()
+inoremap <expr><S-TAB> pumvisible() ? "\<C-p>" : "\<C-h>"
 
+function! s:check_back_space() abort
+  let col = col('.') - 1
+  return !col || getline('.')[col - 1]  =~# '\s'
+endfunction
+
+" Use <c-space> to trigger completion
 " https://github.com/neoclide/coc.nvim#example-vim-configuration
 inoremap <silent><expr> <c-space> coc#refresh()
 
+" Use <cr> to confirm completion, `<C-g>u` means break undo chain at current
+" position. Coc only does snippet and additional edit on confirm.
+" <cr> could be remapped by other vim plugin, try `:verbose imap <CR>`.
+if exists('*complete_info')
+  inoremap <expr> <cr> complete_info()["selected"] != "-1" ? "\<C-y>" : "\<C-g>u\<CR>"
+else
+  inoremap <expr> <cr> pumvisible() ? "\<C-y>" : "\<C-g>u\<CR>"
+endif
+
 "Close preview window when completion is done.
 autocmd! CompleteDone * if pumvisible() == 0 | pclose | endif
+
+" Disable parsing from buffers with a lot of data for typescript
+" https://github.com/neoclide/coc.nvim/pull/1729
+autocmd FileType typescript :let b:coc_enabled = 0
+
+" Resolve workspace folder to fix unresolved-import error: https://vi.stackexchange.com/questions/25076/coc-python-reports-unresolved-import-in-git-subfolder
+" Add '.env' or '.venv' or '.pyenv_version' etc.
+autocmd FileType python :let b:coc_root_patterns = ['.git', '.env', '.python-version']
 
 " gd - go to definition of word under cursor
 nmap <silent> gd <Plug>(coc-definition)
@@ -468,10 +502,10 @@ nmap <Leader>M :Maps<CR>
 " Was getting a weird bug: https://github.com/ludovicchabant/vim-gutentags/issues/178
 " let g:gutentags_exclude_filetypes = ['gitcommit', 'gitconfig', 'gitrebase', 'gitsendemail', 'git']
 
-" ==== NERDTree Plugin ========================================= "
-" Using nn and nf to avoid conflicts with Easymotion
-nmap <Leader>nn :NERDTreeToggle<CR>
-nmap <Leader>nf :NERDTreeFind<CR>
+" " ==== NERDTree Plugin ========================================= "
+" " Using nn and nf to avoid conflicts with Easymotion
+" nmap <Leader>nn :NERDTreeToggle<CR>
+" nmap <Leader>nf :NERDTreeFind<CR>
 
 " ==== UndoTree ================================================ "
 nnoremap <Leader>u :UndotreeShow<CR>
@@ -491,14 +525,16 @@ endif
 " set updatetime=100
 
 " Permanantly expand gitgutter signcolumn
-" set signcolumn=yes
+set signcolumn=yes
 
 " coc-python status line :h coc-status Use autocmd to force lightline update.
 autocmd User CocStatusChange,CocDiagnosticChange call lightline#update()
 
-" Automaticaly close nvim if NERDTree is only thing left open
-autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isTabTree()) | q | endif
+" " Automaticaly close nvim if NERDTree is only thing left open
+" autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isTabTree()) | q | endif
 
-" NERDTree BufError when restoring session (:h sessionoptions)
-set sessionoptions-=blank
+" " NERDTree BufError when restoring session (:h sessionoptions)
+" set sessionoptions-=blank
 
+" Set python_host_prog for python interpreter: https://neovim.io/doc/user/provider.html
+let g:python3_host_prog = '/Users/gaylonalfano/.pyenv/versions/fastapi-full-stack/bin/python'
