@@ -123,10 +123,10 @@ let g:netrw_banner = 1
 let g:netrw_liststyle = 3
 
 " Open files in new window (1-hsplit, 2-vsplit, 3-newtab, 4-prevwin)
-let g:netrw_browse_split = 1
+let g:netrw_browse_split = 4
 
-" Autoresize explore window
-let g:netrw_winsize = 25
+" Autoresize explore window %
+" let g:netrw_winsize = 25
 
 " Can set defaults for window splits
 "set splitbelow
@@ -142,6 +142,7 @@ Plug 'easymotion/vim-easymotion'
 "Plug 'scrooloose/nerdcommenter'
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
 Plug 'neoclide/coc-lists'
+Plug 'leafoftree/vim-svelte-plugin'
 Plug 'junegunn/vim-easy-align'
 Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
 Plug 'junegunn/fzf.vim'
@@ -163,7 +164,8 @@ Plug 'gruvbox-community/gruvbox'
 "Plug 'jreybert/vimagit'
 "Plug 'rhysd/git-messenger.vim'
 "Plug 'ludovicchabant/vim-gutentags'
-"Plug 'sheerun/vim-polyglot'
+Plug 'sheerun/vim-polyglot'
+Plug 'puremourning/vimspector'
 "Plug 'ryanoasis/nerd-fonts'
 "Plug 'ryanoasis/vim-devicons'
 "Plug 'kaicataldo/material.vim'
@@ -218,6 +220,20 @@ set background=dark
 
 " vim-flake8 plugin (not coc-python flake8) only run when writing .py files
 " "autocmd BufWritePost *.py call flake8#Flake8()
+
+" Coc-prettier & ESLint config: 
+" https://thoughtbot.com/blog/modern-typescript-and-react-development-in-vim
+let g:coc_global_extensions = [
+  \ 'coc-tsserver'
+  \ ]
+
+if isdirectory('./node_modules') && isdirectory('./node_modules/prettier')
+  let g:coc_global_extensions += ['coc-prettier']
+endif
+
+if isdirectory('./node_modules') && isdirectory('./node_modules/eslint')
+  let g:coc_global_extensions += ['coc-eslint']
+endif
 
 " coc-python status line :h coc-status configuration with lightline.
 function! CocCurrentFunction()
@@ -316,6 +332,10 @@ nnoremap <Leader><CR> :vsp ~/.config/nvim/init_regular.vim<CR>
 " Quicksearch help docs - Use FZF :Helptags! instead (see below)
 " nnoremap <leader>h :h <C-R>=expand("<cword>")<CR><CR>
 
+" Can also use CocSearch for project-wide search: https://youtu.be/q7gr6s8skt0?list=PLm323Lc7iSW9kRCuzB3J_h7vPjIDedplM&t=61
+" CocSearch uses RG
+" nnoremap <leader>prw :CocSearch <C-R>=expand("<cword>")<CR><CR>
+
 " Replace all instances of current word under cursor. -c flag for confirm
 nnoremap <Leader>r yiw:%s/\<<C-r><C-w>\>//g<left><left>
 " nnoremap <Leader>r yiw:%s/\<<C-r><C-w>\>//gc<left><left><left>
@@ -344,6 +364,16 @@ tnoremap <Esc> <C-\><C-n>
 
 " Exit Terminal Mode with <Esc> key and close buffer
 " tnoremap <Esc> <C-\><C-n>:q!<CR>
+
+" greatest remap ever (Primeagen)
+" Paste
+vnoremap <leader>p "_dP
+
+" next greatest remap ever : asbjornHaland
+" Seems to copy to + clipboard register...
+nnoremap <leader>y "+y
+vnoremap <leader>y "+y
+nnoremap <leader>Y gg"+yG
 
 " ==== COC Plugin ============================================================ "
 " use <tab> for trigger completion and navigate to the next complete item
@@ -502,13 +532,48 @@ nmap <Leader>M :Maps<CR>
 " Was getting a weird bug: https://github.com/ludovicchabant/vim-gutentags/issues/178
 " let g:gutentags_exclude_filetypes = ['gitcommit', 'gitconfig', 'gitrebase', 'gitsendemail', 'git']
 
-" " ==== NERDTree Plugin ========================================= "
+" ==== NERDTree Plugin ========================================= "
 " " Using nn and nf to avoid conflicts with Easymotion
 " nmap <Leader>nn :NERDTreeToggle<CR>
 " nmap <Leader>nf :NERDTreeFind<CR>
 
 " ==== UndoTree ================================================ "
 nnoremap <Leader>u :UndotreeShow<CR>
+
+" ==== vimspector ================================================ "
+" https://youtu.be/U4KLYhkIgB4?t=165
+let g:vimspector_enable_mappings = "HUMAN"
+nmap <Leader>dd :call vimspector#Launch()<CR>
+nmap <Leader>dx :VimspectorReset<CR>
+nmap <Leader>de :VimspectorEval
+nmap <Leader>dw :VimspectorWatch
+nmap <Leader>do :VimspectorShowOutput
+
+nnoremap <leader>dtcb :call vimspector#CleanLineBreakpoint()<CR>
+
+nmap <leader>dl <Plug>VimspectorStepInto
+nmap <leader>dj <Plug>VimspectorStepOver
+nmap <leader>dk <Plug>VimspectorStepOut
+nmap <leader>d_ <Plug>VimspectorRestart
+nmap <leader>dc :call vimspector#Continue()<CR>
+" nnoremap <leader>d<space> :call vimspector#Continue()<CR>
+
+nmap <leader>drc <Plug>VimspectorRunToCursor
+nmap <leader>dbp <Plug>VimspectorToggleBreakpoint
+" nmap <leader>dbp :VimspectorToggleBreakpoint   same as <Plug>?
+nmap <leader>dcbp <Plug>VimspectorToggleConditionalBreakpoint
+
+" Below are some of Primeagen's mappings: https://github.com/awesome-streamers/awesome-streamerrc/blob/master/ThePrimeagen/init.vim
+" NOTE: <Plug> means :call. Also, Primeagen needs these for maximizer plugin
+" call win_gotoid( g:vimspector_session_windows.code )
+" nnoremap <leader>dd :call vimspector#Launch()<CR>
+" nnoremap <leader>dc :call GotoWindow(g:vimspector_session_windows.code)<CR>
+" nnoremap <leader>dt :call GotoWindow(g:vimspector_session_windows.tagpage)<CR>
+" nnoremap <leader>dv :call GotoWindow(g:vimspector_session_windows.variables)<CR>
+" nnoremap <leader>dw :call GotoWindow(g:vimspector_session_windows.watches)<CR>
+" nnoremap <leader>ds :call GotoWindow(g:vimspector_session_windows.stack_trace)<CR>
+" nnoremap <leader>do :call GotoWindow(g:vimspector_session_windows.output)<CR>
+" nnoremap <leader>de :call vimspector#Reset()<CR>
 
 
 " ============================================================================ "
@@ -537,4 +602,4 @@ autocmd User CocStatusChange,CocDiagnosticChange call lightline#update()
 " set sessionoptions-=blank
 
 " Set python_host_prog for python interpreter: https://neovim.io/doc/user/provider.html
-let g:python3_host_prog = '/Users/gaylonalfano/.pyenv/versions/fastapi-full-stack/bin/python'
+" let g:python3_host_prog = '/Users/gaylonalfano/.pyenv/versions/fastapi-full-stack/bin/python'

@@ -210,12 +210,14 @@ export NVIM_TUI_ENABLE_TRUE_COLOR=1
 alias vim="nvim"
 alias top="vtop --theme=wizard"
 #alias ls="colorls -lA --sd --color=never"
+alias ngrok="/Users/gaylonalfano/Code/ngrok"
 
 source $ZSH/oh-my-zsh.sh
 
 # Set Spaceship as prompt
-autoload -U promptinit; promptinit
-prompt spaceship
+# IF prompt not autoloading: (otw already symlinked)
+# autoload -U promptinit; promptinit
+# prompt spaceship
 SPACESHIP_PROMPT_ORDER=(
   vi_mode
   user
@@ -364,3 +366,4 @@ esac
 # Enable auto-activation of virtualenvs.
 eval "$(pyenv init -)"
 eval "$(pyenv virtualenv-init -)"
+export PATH="/usr/local/sbin:$PATH"
