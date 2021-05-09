@@ -129,7 +129,8 @@ prompt_context(){}
 # Settings copied from Jarvis .zshrc file
 
 # Setting rg as the default source for fzf
-export FZF_DEFAULT_COMMAND='rg --files'
+# https://github.com/junegunn/fzf/issues/337
+export FZF_DEFAULT_COMMAND='rg --hidden --files -g "!.git/"'
 
 # Apply the command to CTRL-T as well
 export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
@@ -362,8 +363,26 @@ esac
 #  alias brew='env PATH=${PATH//$(pyenv root)\/shims:/} brew'
 #fi
 
+# iTerm custom Tab Titles to current directory
+# https://gist.github.com/phette23/5270658
+DISABLE_AUTO_TITLE="true"
+
+precmd() {
+  # sets the tab title to current dir
+  echo -ne "\e]1;${PWD##*/}\a"
+}
+
+
 # Adding pyenv to the load path (per pyenv-installer)
 # Enable auto-activation of virtualenvs.
 eval "$(pyenv init -)"
 eval "$(pyenv virtualenv-init -)"
 export PATH="/usr/local/sbin:$PATH"
+# export PATH="/usr/local/bin:$PATH"  # needed for GLOBAL Node? Yes...
+# export PATH="/usr/local:$PATH"  # needed for LOCAL Node? Broken...
+# Manually adding NVM to manage NPM and Node versions/upgrades
+export NVM_DIR="$HOME/.nvm"
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh" # This loads nvm
+
+# Added by Amplify CLI binary installer
+export PATH="$HOME/.amplify/bin:$PATH"

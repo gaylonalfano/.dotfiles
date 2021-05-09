@@ -112,7 +112,7 @@ if (has("termguicolors"))
 endif
 
 " Editor theme
-set background=dark
+" set background=dark
 
 " === Netrw === "
 " https://shapeshed.com/vim-netrw/
@@ -147,12 +147,12 @@ Plug 'junegunn/fzf.vim'
 Plug 'tpope/vim-surround'
 Plug 'tpope/vim-commentary'
 Plug 'vim-utils/vim-man'
-Plug 'mbbill/undotree'
 Plug 'itchyny/lightline.vim'
 Plug 'gruvbox-community/gruvbox'
 Plug 'sheerun/vim-polyglot'
 Plug 'puremourning/vimspector'
 " ========== Inactive below ===========
+" Plug 'mbbill/undotree'
 " Plug 'scrooloose/nerdtree'
 "Plug 'scrooloose/nerdcommenter'
 "Plug 'junegunn/goyo.vim'
@@ -458,7 +458,8 @@ nnoremap <silent> <leader>cl  :<C-u>CocList locationlist<CR>
 " manage extensions
 nnoremap <silent> <leader>cx  :<C-u>CocList extensions<cr>
 
-" rename the current word in the cursor
+" rename (replace?) the current word in the cursor
+" Currently have <leader>r to do the same
 nmap <leader>cr  <Plug>(coc-rename)
 nmap <leader>cf  <Plug>(coc-format-selected)
 vmap <leader>cf  <Plug>(coc-format-selected)
@@ -466,6 +467,9 @@ vmap <leader>cf  <Plug>(coc-format-selected)
 " run code actions
 vmap <leader>ca  <Plug>(coc-codeaction-selected)
 nmap <leader>ca  <Plug>(coc-codeaction-selected)
+
+" toggle terminal
+nmap <leader>ct  <Plug>(coc-terminal-toggle)
 
 
 " ==== vim-easy-align ========================================== "
@@ -540,7 +544,8 @@ nmap <Leader>M :Maps<CR>
 " nmap <Leader>nf :NERDTreeFind<CR>
 
 " ==== UndoTree ================================================ "
-nnoremap <Leader>u :UndotreeShow<CR>
+" UPDATE Neovim 0.5 incompatible: https://www.reddit.com/r/neovim/comments/lxu7p3/error_incompatible_undo_file_whenever_i_open_a/
+" nnoremap <Leader>u :UndotreeShow<CR>
 
 " ==== vimspector ================================================ "
 " https://youtu.be/U4KLYhkIgB4?t=165
@@ -594,6 +599,9 @@ endif
 " Permanantly expand gitgutter signcolumn
 set signcolumn=yes
 
+" Expand gutter columns for folding markers
+set foldcolumn=1
+
 " coc-python status line :h coc-status Use autocmd to force lightline update.
 autocmd User CocStatusChange,CocDiagnosticChange call lightline#update()
 
@@ -605,3 +613,11 @@ autocmd User CocStatusChange,CocDiagnosticChange call lightline#update()
 
 " Set python_host_prog for python interpreter: https://neovim.io/doc/user/provider.html
 " let g:python3_host_prog = '/Users/gaylonalfano/.pyenv/versions/fastapi-full-stack/bin/python'
+
+" Save text folding (:mkview) and reload on open (:loadview)
+" https://stackoverflow.com/questions/37552913/vim-how-to-keep-folds-on-save
+" NOTE: This is for Vim (not Neovim) so may vary
+autocmd BufWinLeave *.* mkview
+autocmd BufWinEnter *.* silent! loadview
+" NOTE: There is a viewoptions (:h 'viewoptions') that affects :mkview
+" let &viewoptions="folds,cursor,unix"
