@@ -7,6 +7,7 @@
 PATH=$(ruby -e 'puts Gem.bindir'):$PATH
 export PATH="$HOME/.deno/bin:$PATH"
 export PATH="$HOME/.cargo/bin:$PATH"
+export PATH="$HOME/.local/share/solana/install/active_release/bin:$PATH"
 export PATH="$HOME/.emacs.d/bin:$PATH"
 export PATH="$HOME/.local/lib:$PATH"
 export PATH="$HOME/.local/bin:$PATH"
