@@ -150,8 +150,8 @@ Plug 'vim-utils/vim-man'
 Plug 'itchyny/lightline.vim'
 Plug 'gruvbox-community/gruvbox'
 Plug 'sheerun/vim-polyglot'
-Plug 'puremourning/vimspector'
 " ========== Inactive below ===========
+" Plug 'puremourning/vimspector'
 " Plug 'mbbill/undotree'
 " Plug 'scrooloose/nerdtree'
 "Plug 'scrooloose/nerdcommenter'
@@ -273,9 +273,9 @@ let g:lightline = {
   \   'cocstatus': 'coc#status',
   \   'currentfunction': 'CocCurrentFunction'
   \ },
-  \ 'separator': { 'left': '', 'right': '' },
-  \ 'subseparator': { 'left': '', 'right': '' }
   \ }
+  " \ 'separator': { 'left': '<', 'right': '>' },
+  " \ 'subseparator': { 'left': '<', 'right': '>' }
 
 " let g:lightline.tabline          = {'left': [['buffers']], 'right': [['close']]}
 let g:lightline.component_expand = {'buffers': 'lightline#bufferline#buffers'}

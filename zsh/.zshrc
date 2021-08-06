@@ -4,20 +4,20 @@
 
 # Adding Gem.bindir directory to PATH env variable
 # so can run scripts from any installed gem.
-PATH=$(ruby -e 'puts Gem.bindir'):$PATH
-export PATH="$HOME/.deno/bin:$PATH"
-export PATH="$HOME/.cargo/bin:$PATH"
-export PATH="$HOME/.local/share/solana/install/active_release/bin:$PATH"
-export PATH="$HOME/.emacs.d/bin:$PATH"
-export PATH="$HOME/.local/lib:$PATH"
-export PATH="$HOME/.local/bin:$PATH"
-export PATH="$HOME/.pyenv/bin:$PATH"
+# PATH=$(ruby -e 'puts Gem.bindir'):$PATH
+# export PATH="$HOME/.deno/bin:$PATH"
+# export PATH="$HOME/.cargo/bin:$PATH"
+# export PATH="$HOME/.local/share/solana/install/active_release/bin:$PATH"
+# export PATH="$HOME/.emacs.d/bin:$PATH"
+# export PATH="$HOME/.local/lib:$PATH"
+# export PATH="$HOME/.local/bin:$PATH"
+# export PATH="$HOME/.pyenv/bin:$PATH"
 
 # Export UID for Docker and Postgraphile
-export UID
+# export UID
 
 # Config Pyenv root
-export PYENV_ROOT="${HOME}/.pyenv"
+export PYENV_ROOT="$HOME/.pyenv"
 export PIPENV_PYTHON="$PYENV_ROOT/shims/python/"
 
 # Path to your oh-my-zsh installation.
@@ -93,7 +93,8 @@ DISABLE_UNTRACKED_FILES_DIRTY="true"
 # Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
-plugins=(brew docker git node pip poetry python virtualenv z zsh-autosuggestions zsh-syntax-highlighting)
+# REMOVED plugins (8/2021): docker poetry
+plugins=(brew git node pip python virtualenv z zsh-autosuggestions zsh-syntax-highlighting)
 
 
 
@@ -103,20 +104,8 @@ plugins=(brew docker git node pip poetry python virtualenv z zsh-autosuggestions
 DEFAULT_USER="gaylonalfano"
 prompt_context(){}
 
-# export MANPATH="/usr/local/man:$MANPATH"
-
 # You may need to manually set your language environment
 # export LANG=en_US.UTF-8
-
-# Preferred editor for local and remote sessions
-# if [[ -n $SSH_CONNECTION ]]; then
-#   export EDITOR='vim'
-# else
-#   export EDITOR='mvim'
-# fi
-
-# Compilation flags
-# export ARCHFLAGS="-arch x86_64"
 
 # Set personal aliases, overriding those provided by oh-my-zsh libs,
 # plugins, and themes. Aliases can be placed here, though oh-my-zsh
@@ -127,7 +116,6 @@ prompt_context(){}
 # alias zshconfig="mate ~/.zshrc"
 # alias ohmyzsh="mate ~/.oh-my-zsh"
 
-# Settings copied from Jarvis .zshrc file
 
 # Setting rg as the default source for fzf
 # https://github.com/junegunn/fzf/issues/337
@@ -136,8 +124,6 @@ export FZF_DEFAULT_COMMAND='rg --hidden --files -g "!.git/"'
 # Apply the command to CTRL-T as well
 export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
 
-# Set location of z installation
-. /usr/local/etc/profile.d/z.sh
 
 ## FZF FUNCTIONS ##
 
@@ -200,7 +186,8 @@ fgr() {
 }
 
 # Enabled zsh-autosuggestions
-source ~/.zsh/zsh-autosuggestions/zsh-autosuggestions.zsh
+# source ~/.zsh/zsh-autosuggestions/zsh-autosuggestions.zsh # OLD before new MBP 2021
+source ~/.oh-my-zsh/custom/plugins/zsh-autosuggestions/zsh-autosuggestions.zsh
 
 # Set default editor to nvim
 export EDITOR='nvim'
@@ -356,13 +343,13 @@ esac
 
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 
-#if command -v pyenv 1>/dev/null 2>&1; then
-#  # Initialize Pyenv
-#  eval "$(pyenv init -)"
-#  # Stop `brew doctor` from crying about pyenv shims
-#  # https://github.com/pyenv/pyenv/issues/106#issuecomment-440826532
-#  alias brew='env PATH=${PATH//$(pyenv root)\/shims:/} brew'
-#fi
+# if command -v pyenv 1>/dev/null 2>&1; then
+#   # Initialize Pyenv
+#   eval "$(pyenv init -)"
+#   # Stop `brew doctor` from crying about pyenv shims
+#   # https://github.com/pyenv/pyenv/issues/106#issuecomment-440826532
+#   alias brew='env PATH=${PATH//$(pyenv root)\/shims:/} brew'
+# fi
 
 # iTerm custom Tab Titles to current directory
 # https://gist.github.com/phette23/5270658
@@ -379,11 +366,6 @@ precmd() {
 eval "$(pyenv init -)"
 eval "$(pyenv virtualenv-init -)"
 export PATH="/usr/local/sbin:$PATH"
-# export PATH="/usr/local/bin:$PATH"  # needed for GLOBAL Node? Yes...
-# export PATH="/usr/local:$PATH"  # needed for LOCAL Node? Broken...
 # Manually adding NVM to manage NPM and Node versions/upgrades
 export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh" # This loads nvm
-
-# Added by Amplify CLI binary installer
-export PATH="$HOME/.amplify/bin:$PATH"
