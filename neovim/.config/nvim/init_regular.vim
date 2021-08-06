@@ -140,7 +140,6 @@ call plug#begin('~/.config/nvim/plugged')
 Plug 'easymotion/vim-easymotion'
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
 Plug 'neoclide/coc-lists'
-Plug 'leafoftree/vim-svelte-plugin'
 Plug 'junegunn/vim-easy-align'
 Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
 Plug 'junegunn/fzf.vim'
@@ -150,40 +149,7 @@ Plug 'vim-utils/vim-man'
 Plug 'itchyny/lightline.vim'
 Plug 'gruvbox-community/gruvbox'
 Plug 'sheerun/vim-polyglot'
-" ========== Inactive below ===========
 " Plug 'puremourning/vimspector'
-" Plug 'mbbill/undotree'
-" Plug 'scrooloose/nerdtree'
-"Plug 'scrooloose/nerdcommenter'
-"Plug 'junegunn/goyo.vim'
-"Plug 'tpope/vim-sensible'
-"Plug 'tpope/vim-sleuth'
-"Plug 'tpope/vim-unimpaired'
-" Plug 'altercation/vim-colors-solarized'
-"Plug 'wellle/targets.vim'
-"Plug 'thaerkh/vim-workspace'
-"Plug 'mattn/emmet-vim'
-"Plug 'airblade/vim-gitgutter'
-"Plug 'jreybert/vimagit'
-"Plug 'rhysd/git-messenger.vim'
-"Plug 'ludovicchabant/vim-gutentags'
-"Plug 'ryanoasis/nerd-fonts'
-"Plug 'ryanoasis/vim-devicons'
-"Plug 'kaicataldo/material.vim'
-"Plug 'liuchengxu/vim-which-key'
-"Plug 'euclio/vim-markdown-composer', { 'do': function('BuildComposer') }
-
-"" === Markdown Composer ===
-"function! BuildComposer(info)
-"  if a:info.status != 'unchanged' || a:info.force
-"    if has('nvim')
-"      !cargo build --release --locked
-"    else
-"      !cargo build --release --locked --no-default-features --features json-rpc
-"    endif
-"  endif
-"endfunction
-"
 
 " Initialize plugin system
 call plug#end()
@@ -201,16 +167,6 @@ set background=dark
 " ============================================================================ "
 " ===                           PLUGIN SETUP                               === "
 " ============================================================================
-
-" " === NERDTree === "
-" " Show hidden files/directories
-" let g:NERDTreeShowHidden = 1
-
-" " Show minimal UI for NERDTree
-" let g:NERDTreeMinimalUI = 1
-
-" " Set default window width for NERDTree
-" let g:NERDTreeWinSize = 30
 
 " === CoC Plugin === "
 " coc-python MS Python Language Server
@@ -321,7 +277,7 @@ nmap <C-k> <C-w>k
 nmap <C-l> <C-w>l
 
 " provide hjkl movements in Insert mode via the <Alt> modifier key (or M for
-" meta) -- Could never get to work.
+" meta) -- ***Could never get to work.
 " inoremap <A-h> <C-o>h
 " inoremap <A-j> <C-o>j
 " inoremap <A-l> <C-o>l
@@ -534,19 +490,6 @@ nmap <Leader>H :Helptags!<CR>
 " Key Mappings Finder
 nmap <Leader>M :Maps<CR>
 
-" ==== gutentags =============================================== "
-" Was getting a weird bug: https://github.com/ludovicchabant/vim-gutentags/issues/178
-" let g:gutentags_exclude_filetypes = ['gitcommit', 'gitconfig', 'gitrebase', 'gitsendemail', 'git']
-
-" ==== NERDTree Plugin ========================================= "
-" " Using nn and nf to avoid conflicts with Easymotion
-" nmap <Leader>nn :NERDTreeToggle<CR>
-" nmap <Leader>nf :NERDTreeFind<CR>
-
-" ==== UndoTree ================================================ "
-" UPDATE Neovim 0.5 incompatible: https://www.reddit.com/r/neovim/comments/lxu7p3/error_incompatible_undo_file_whenever_i_open_a/
-" nnoremap <Leader>u :UndotreeShow<CR>
-
 " ==== vimspector ================================================ "
 " https://youtu.be/U4KLYhkIgB4?t=165
 let g:vimspector_enable_mappings = "HUMAN"
@@ -604,12 +547,6 @@ set foldcolumn=1
 
 " coc-python status line :h coc-status Use autocmd to force lightline update.
 autocmd User CocStatusChange,CocDiagnosticChange call lightline#update()
-
-" " Automaticaly close nvim if NERDTree is only thing left open
-" autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isTabTree()) | q | endif
-
-" " NERDTree BufError when restoring session (:h sessionoptions)
-" set sessionoptions-=blank
 
 " Set python_host_prog for python interpreter: https://neovim.io/doc/user/provider.html
 " let g:python3_host_prog = '/Users/gaylonalfano/.pyenv/versions/fastapi-full-stack/bin/python'
