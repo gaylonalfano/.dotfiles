@@ -2,9 +2,7 @@
 # https://apple.stackexchange.com/questions/358687/right-way-to-add-paths-to-path-in-mojave
 [ -x /usr/libexec/path_helper ] && eval $(/usr/libexec/path_helper -s)
 
-# Config Pyenv root
-export PYENV_ROOT="$HOME/.pyenv"
-export PIPENV_PYTHON="$PYENV_ROOT/shims/python/"
+# Config Pyenv root INSIDE .zprofile and/or at BOTTOM of .zshrc so it's TOP of PATH
 
 # Path to your oh-my-zsh installation.
 export ZSH=~/.oh-my-zsh
@@ -255,20 +253,13 @@ export VIRTUAL_ENV_DISABLE_PROMPT=true
 
 
 # Enable rbenv (Ruby package manager) to automatically load
-case "$PATH:" in
-  *"/Users/gaylonalfano/.rbenv/shims:"*) :;; # already there
-  *) if which rbenv > /dev/null; then eval "$(rbenv init -)"; fi;;
-esac
+# case "$PATH:" in
+#   *"/Users/gaylonalfano/.rbenv/shims:"*) :;; # already there
+#   *) if which rbenv > /dev/null; then eval "$(rbenv init -)"; fi;;
+# esac
 
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 
-# if command -v pyenv 1>/dev/null 2>&1; then
-#   # Initialize Pyenv
-#   eval "$(pyenv init -)"
-#   # Stop `brew doctor` from crying about pyenv shims
-#   # https://github.com/pyenv/pyenv/issues/106#issuecomment-440826532
-#   alias brew='env PATH=${PATH//$(pyenv root)\/shims:/} brew'
-# fi
 
 # iTerm custom Tab Titles to current directory
 # https://gist.github.com/phette23/5270658
@@ -280,11 +271,35 @@ precmd() {
 }
 
 
-# Adding pyenv to the load path (per pyenv-installer)
-# Enable auto-activation of virtualenvs.
-eval "$(pyenv init -)"
-eval "$(pyenv virtualenv-init -)"
-export PATH="/usr/local/sbin:$PATH"
+# export PATH="/usr/local/sbin:$PATH"
 # Manually adding NVM to manage NPM and Node versions/upgrades
 export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh" # This loads nvm
+
+
+# Adding pyenv to the load path (per pyenv-installer)
+# Enable auto-activation of virtualenvs.
+export PYENV_ROOT="$HOME/.pyenv"
+export PATH="$PYENV_ROOT/bin:$PATH"
+export PATH="$PYENV_ROOT/shims:$PATH"  #  Needed? Yes, I believe for picking up correct 'python -V'
+eval "$(pyenv init -)"
+eval "$(pyenv virtualenv-init -)"
+
+# NOTE/UPDATE (8/7/21): I don't believe I need the following if/fi blocks but I could be wrong.
+# Keeping these here for future reference just in case I get more issues.
+# TROUBLESHOOTING shell not picking up pyenv python version:
+# # https://stackoverflow.com/questions/33321312/cannot-switch-python-with-pyenv#:~:text=pyenv%2Fshims%20directory%20is%20at,pyenv%2Fshims%20.
+# if command -v pyenv 1>/dev/null 2>&1; then
+#   # Initialize Pyenv
+#   eval "$(pyenv init -)"
+# fi
+# # NOTE For Updated Pyenv version:
+# https://github.com/pyenv/pyenv/issues/1649
+# if command -v pyenv 1>/dev/null 2>&1; then
+#     export PYENV_ROOT="$HOME/.pyenv"
+#     PATH=${PATH#"$PYENV_ROOT/shims:"}
+#     eval "$(pyenv init -)"
+#     eval "$(pyenv virtualenv-init -)"
+#     export PATH
+# fi
+

@@ -141,7 +141,7 @@ Plug 'easymotion/vim-easymotion'
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
 Plug 'neoclide/coc-lists'
 Plug 'junegunn/vim-easy-align'
-Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
+Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': { -> fzf#install() } }
 Plug 'junegunn/fzf.vim'
 Plug 'tpope/vim-surround'
 Plug 'tpope/vim-commentary'
@@ -368,7 +368,7 @@ autocmd! CompleteDone * if pumvisible() == 0 | pclose | endif
 
 "" Resolve workspace folder to fix unresolved-import error: https://vi.stackexchange.com/questions/25076/coc-python-reports-unresolved-import-in-git-subfolder
 "" Add '.env' or '.venv' or '.pyenv_version' etc.
-autocmd FileType python :let b:coc_root_patterns = ['.git', '.env', '.python-version']
+autocmd FileType python :let b:coc_root_patterns = ['.git', '.env', 'venv', '.venv', '.python-version']
 
 "" gd - go to definition of word under cursor
 nmap <silent> gd <Plug>(coc-definition)
