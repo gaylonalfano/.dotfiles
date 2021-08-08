@@ -21,8 +21,6 @@
   "signature.target": "echo",
   "suggest.timeout": 5000,
   "suggest.defaultSortMethod": "none",
-  "suggest.noselect": false,
-  "suggest.enablePreselect": true,
   "typescript.format.semicolons": "ignore",
   "typescript.autoClosingTags": true,
   "typescript.format.insertSpaceAfterOpeningAndBeforeClosingNonemptyBraces": true,
