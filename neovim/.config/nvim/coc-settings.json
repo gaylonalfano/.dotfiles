@@ -8,9 +8,14 @@
     "markdown",
     "javascript",
     "typescript",
+    "svelte",
+    "vue",
     "json",
-    "jsonc"
+    "jsonc",
+    "css",
+    "html"
   ],
+  /* "prettier.singleQuote": true, */
   "coc.source.around.firstMatch": false,
   "coc.source.file.ignoreHidden": false,
   "diagnostic.format": "%message [%source]",
@@ -25,6 +30,7 @@
   "typescript.autoClosingTags": true,
   "typescript.format.insertSpaceAfterOpeningAndBeforeClosingNonemptyBraces": true,
   "typescript.preferences.useAliasesForRenames": false,
+  // "snippets.ultisnips.enable": false /* FIXME Since pythonx not working */,
   "languageserver": {
     /* "jedi": { */
     /*   "command": "jedi-language-server", */
@@ -92,5 +98,8 @@
     /*   ], */
     /*   "progressOnInitialization": true */
     /* } */
-  }
+  },
+  "svelte.enable-ts-plugin": true,
+  "svelte.plugin.typescript.enable": true,
+  "svelte.plugin.typescript.documentSymbols.enable": true
 }

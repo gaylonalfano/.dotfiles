@@ -303,3 +303,6 @@ eval "$(pyenv virtualenv-init -)"
 #     export PATH
 # fi
 
+# Adding Solana version installed inside ~/Code dir
+# https://lorisleiva.com/create-a-solana-dapp-from-scratch/getting-started-with-solana-and-anchor#install-solana-on-apple-m1
+# export PATH="/Users/gaylonalfano/Code/solana"/bin:"$PATH"

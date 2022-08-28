@@ -149,6 +149,8 @@ Plug 'vim-utils/vim-man'
 Plug 'itchyny/lightline.vim'
 Plug 'gruvbox-community/gruvbox'
 Plug 'sheerun/vim-polyglot'
+Plug 'leafOfTree/vim-svelte-plugin'
+Plug 'herringtondarkholme/yats.vim'
 " Plug 'puremourning/vimspector'
 
 " Initialize plugin system
@@ -240,6 +242,13 @@ let g:lightline#bufferline#shorten_path = 0
 let g:lightline#bufferline#unnamed      = '[No Name]'
 let g:lightline#buferline#enable_devicons = 1
 let g:lightline#bufferline#unicode_symbols = 1
+
+
+" === vim-svelte-plugin
+" https://github.com/leafOfTree/vim-svelte-plugin
+" NOTE This allows for lang="ts" highlighting and formatting
+let g:vim_svelte_plugin_load_full_syntax = 1
+let g:vim_svelte_plugin_use_typescript = 1
 
 " ============================================================================ "
 " ===                             KEY MAPPINGS                             === "
@@ -333,33 +342,116 @@ vnoremap <leader>y "+y
 nnoremap <leader>Y gg"+yG
 
 "" ==== COC Plugin ============================================================ "
-"" use <tab> for trigger completion and navigate to the next complete item
-inoremap <silent><expr> <Tab>
-      \ pumvisible() ? "\<C-n>" :
-      \ <SID>check_back_space() ? "\<Tab>" :
-      \ coc#refresh()
-inoremap <expr><S-TAB> pumvisible() ? "\<C-p>" : "\<C-h>"
+"" ==== UPDATE 20220827: 
+" NOTE Coc has new pop up menu (see :h coc-completion)
+" ==== UPDATE WITHOUT configuration:
+""Use <C-n>, <C-p>, <up> and <down> to navigate completion list: >
 
-function! s:check_back_space() abort
-  let col = col('.') - 1
-  return !col || getline('.')[col - 1]  =~# '\s'
-endfunction
+"  inoremap <silent><expr> <C-n> coc#pum#visible() ? coc#pum#next(1) : "\<C-n>"
+"  inoremap <silent><expr> <C-p> coc#pum#visible() ? coc#pum#prev(1) : "\<C-p>"
+"  inoremap <silent><expr> <down> coc#pum#visible() ? coc#pum#next(0) : "\<down>"
+"  inoremap <silent><expr> <up> coc#pum#visible() ? coc#pum#prev(0) : "\<up>"
+"<
+""Use <PageDown> and <PageUp> to scroll: >
+
+"  inoremap <silent><expr> <PageDown> coc#pum#visible() ? coc#pum#scroll(1) : "\<PageDown>"
+"  inoremap <silent><expr> <PageUp> coc#pum#visible() ? coc#pum#scroll(0) : "\<PageUp>"
+"<
+""Use <C-e> and <C-y> to cancel and confirm completion: >
+
+"  inoremap <silent><expr> <C-e> coc#pum#visible() ? coc#pum#cancel() : "\<C-e>"
+"  inoremap <silent><expr> <C-y> coc#pum#visible() ? coc#pum#confirm() : "\<C-y>"
+
+""Note: <CR> and <Tab> are not remapped by coc.nvim.
+
+" ==== UPDATE WITH configuration:
+" Example user key-mappings:~
+" 							*coc-completion-example*
+
+" Note: use command `:verbose imap` to check current insert
+" key-mappings when your key-mappings not work.
+
+" Use <tab> and <S-tab> to navigate completion list: >
+
+  function! CheckBackSpace() abort
+    let col = col('.') - 1
+    return !col || getline('.')[col - 1]  =~ '\s'
+  endfunction
+
+  " Insert <tab> when previous text is space, refresh completion if not.
+  inoremap <silent><expr> <TAB>
+    \ coc#pum#visible() ? coc#pum#next(1):
+    \ CheckBackSpace() ? "\<Tab>" :
+    \ coc#refresh()
+  inoremap <expr><S-TAB> coc#pum#visible() ? coc#pum#prev(1) : "\<C-h>"
+
+" Use <c-space> to trigger completion: >
+
+  if has('nvim')
+    inoremap <silent><expr> <c-space> coc#refresh()
+  else
+    inoremap <silent><expr> <c-@> coc#refresh()
+  endif
+  
+" Use <CR> to confirm completion, use: >
+
+  inoremap <expr> <cr> coc#pum#visible() ? coc#_select_confirm() : "\<CR>"
+
+" To make <CR> to confirm selection of selected complete item or notify coc.nvim
+" to format on enter, use:
+
+  inoremap <silent><expr> <CR> coc#pum#visible() ? coc#_select_confirm()
+				\: "\<C-g>u\<CR>\<c-r>=coc#on_enter()\<CR>"
+
+" Map <tab> for trigger completion, completion confirm, snippet expand and jump
+" like VSCode: >
+
+  inoremap <silent><expr> <TAB>
+    \ coc#pum#visible() ? coc#_select_confirm() :
+    \ coc#expandableOrJumpable() ?
+    \ "\<C-r>=coc#rpc#request('doKeymap', ['snippets-expand-jump',''])\<CR>" :
+    \ CheckBackSpace() ? "\<TAB>" :
+    \ coc#refresh()
+
+  function! CheckBackSpace() abort
+    let col = col('.') - 1
+    return !col || getline('.')[col - 1]  =~# '\s'
+  endfunction
+
+  let g:coc_snippet_next = '<tab>'
+
+" Note: the `coc-snippets` extension is required for this to work.
+
+
+"====== OLD (before Coc's new pop-up menu) =========
+" use <tab> for trigger completion and navigate to the next complete item
+" inoremap <silent><expr> <Tab>
+"       \ pumvisible() ? "\<C-n>" :
+"       \ <SID>check_back_space() ? "\<Tab>" :
+"       \ coc#refresh()
+" inoremap <expr><S-TAB> pumvisible() ? "\<C-p>" : "\<C-h>"
+
+" function! s:check_back_space() abort
+"   let col = col('.') - 1
+"   return !col || getline('.')[col - 1]  =~# '\s'
+" endfunction
 
 "" Use <c-space> to trigger completion
 "" https://github.com/neoclide/coc.nvim#example-vim-configuration
-inoremap <silent><expr> <c-space> coc#refresh()
+" inoremap <silent><expr> <c-space> coc#refresh()
 
 "" Use <cr> to confirm completion, `<C-g>u` means break undo chain at current
 "" position. Coc only does snippet and additional edit on confirm.
 "" <cr> could be remapped by other vim plugin, try `:verbose imap <CR>`.
-if exists('*complete_info')
-  inoremap <expr> <cr> complete_info()["selected"] != "-1" ? "\<C-y>" : "\<C-g>u\<CR>"
-else
-  inoremap <expr> <cr> pumvisible() ? "\<C-y>" : "\<C-g>u\<CR>"
-endif
+"if exists('*complete_info')
+"  inoremap <expr> <cr> complete_info()["selected"] != "-1" ? "\<C-y>" : "\<C-g>u\<CR>"
+"else
+"  inoremap <expr> <cr> pumvisible() ? "\<C-y>" : "\<C-g>u\<CR>"
+"endif
 
-""Close preview window when completion is done.
-autocmd! CompleteDone * if pumvisible() == 0 | pclose | endif
+"""Close preview window when completion is done.
+"autocmd! CompleteDone * if pumvisible() == 0 | pclose | endif
+"=== coc-completion ends here (see above) ===
 
 "" Disable parsing from buffers with a lot of data for typescript (Deno proj)
 "" CAREFUL! This broke my suggestions for TS files (but JS still worked)!
